@@ -1,4 +1,4 @@
-const res = await fetch("/send-telegram.js", {
+const res = await fetch("/api/send-telegram", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ text: pesan })
@@ -6,9 +6,9 @@ const res = await fetch("/send-telegram.js", {
 
 let data;
 try {
-  data = await res.json();  // kalau server kirim kosong → akan error
+  data = await res.json();
 } catch (err) {
-  alert("Response dari server tidak valid JSON.");
+  alert("❌ Server tidak membalas JSON.");
   return;
 }
 
@@ -17,18 +17,6 @@ if (data.success) {
 } else {
   alert("❌ Gagal: " + (data.error || "Tidak diketahui"));
 }
-
-function startOrder(product) {
-  localStorage.setItem('currentProduct', product);
-  window.location.href = 'payment.html';
-}
-
-function goToForm() {
-  const fileInput = document.getElementById("buktiPembayaran");
-  if (!fileInput.files || fileInput.files.length === 0) {
-    alert("Silakan upload bukti transfer terlebih dahulu!");
-    return;
-  }
 
   const currentProduct = localStorage.getItem('currentProduct');
   const isJasteb = currentProduct.toLowerCase().includes("jasteb vvip");
