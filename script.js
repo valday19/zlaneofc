@@ -1,3 +1,8 @@
+function startOrder(product) {
+  localStorage.setItem('currentProduct', product);
+  window.location.href = 'payment.html';
+}
+
 function goToForm() {
   const fileInput = document.getElementById("buktiPembayaran");
   if (!fileInput.files || fileInput.files.length === 0) {
