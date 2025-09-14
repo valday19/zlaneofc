@@ -1,3 +1,23 @@
+const res = await fetch("/api/send-telegram", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ text: pesan })
+});
+
+let data;
+try {
+  data = await res.json();
+} catch (err) {
+  alert("❌ Server tidak membalas JSON.");
+  return;
+}
+
+if (data.success) {
+  alert("✅ Pesanan berhasil dikirim!");
+} else {
+  alert("❌ Gagal: " + (data.error || "Tidak diketahui"));
+}
+
 function startOrder(product) {
   localStorage.setItem('currentProduct', product);
   window.location.href = 'payment.html';
