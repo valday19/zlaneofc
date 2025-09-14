@@ -1,4 +1,4 @@
-const res = await fetch("/api/send-telegram", {
+const res = await fetch("/send-telegram.js", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ text: pesan })
@@ -24,7 +24,7 @@ function startOrder(product) {
 }
 
 function goToForm() {
-  const fileInput = document.getElementById("buktiTransfer");
+  const fileInput = document.getElementById("buktiPembayaran");
   if (!fileInput.files || fileInput.files.length === 0) {
     alert("Silakan upload bukti transfer terlebih dahulu!");
     return;
