@@ -21,72 +21,59 @@ function goToForm() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Form Biasa
-  const formBiasa = document.getElementById("formBiasa");
-  if (formBiasa) {
-    formBiasa.addEventListener("submit", async (e) => {
+  // Fungsi umum untuk handle form
+  async function handleSubmit(form, type = "biasa") {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formData = new FormData(formBiasa);
 
-      const payload = {
-        produk: localStorage.getItem("currentProduct") || "Produk Biasa",
-        nama: formData.get("nama"),
-        wa: formData.get("wa"),
-        catatan: formData.get("catatan")
-      };
+      const formData = new FormData(form);
+      formData.append(
+        "produk",
+        localStorage.getItem("currentProduct") || (type === "jasteb" ? "Produk JASTEB" : "Produk Biasa")
+      );
 
       try {
         const res = await fetch("/api/send-telegram", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          body: formData, // kirim langsung FormData (ada teks + file)
         });
-        const data = await res.json();
 
+        const data = await res.json();
         if (data.success) {
-          alert("✅ Pesanan berhasil dikirim ke admin!");
+          if (type === "biasa") {
+            if (confirm("✅ Pesanan *Biasa* berhasil dikirim ke admin!\nKlik OK untuk join grup WhatsApp.")) {
+              window.location.href = "https://chat.whatsapp.com/xxxxBiasa"; // ganti dengan link grup Biasa
+            }
+          } else if (type === "jasteb") {
+            if (confirm("✅ Pesanan *JASTEB* berhasil dikirim ke admin!\nKlik OK untuk join grup WhatsApp.")) {
+              window.location.href = "https://chat.whatsapp.com/yyyyJasteb"; // ganti dengan link grup JASTEB
+            }
+          }
+          form.reset(); // reset form setelah sukses
         } else {
-          alert("❌ Gagal: " + JSON.stringify(data.error));
+          if (type === "biasa") {
+            alert("❌ Gagal mengirim Pesanan Biasa: " + JSON.stringify(data.error));
+          } else if (type === "jasteb") {
+            alert("❌ Gagal mengirim Pesanan JASTEB: " + JSON.stringify(data.error));
+          }
         }
       } catch (err) {
-        alert("❌ Error: " + err.message);
+        if (type === "biasa") {
+          alert("❌ Error Pesanan Biasa: " + err.message);
+        } else if (type === "jasteb") {
+          alert("❌ Error Pesanan JASTEB: " + err.message);
+        }
       }
     });
   }
+
+  // Form Biasa
+  const formBiasa = document.getElementById("formBiasa");
+  if (formBiasa) handleSubmit(formBiasa, "biasa");
 
   // Form Jasteb
   const formJasteb = document.getElementById("formJasteb");
-  if (formJasteb) {
-    formJasteb.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(formJasteb);
-
-      const payload = {
-        produk: localStorage.getItem("currentProduct") || "Produk JASTEB",
-        nama: formData.get("nama"),
-        wa: formData.get("wa"),
-        gmail: formData.get("gmail"), // form jasteb ada tambahan Gmail
-        catatan: formData.get("catatan")
-      };
-
-      try {
-        const res = await fetch("/api/send-telegram", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          alert("✅ Pesanan JASTEB berhasil dikirim ke admin!");
-        } else {
-          alert("❌ Gagal: " + JSON.stringify(data.error));
-        }
-      } catch (err) {
-        alert("❌ Error: " + err.message);
-      }
-    });
-  }
+  if (formJasteb) handleSubmit(formJasteb, "jasteb");
 });
         
 document.addEventListener('DOMContentLoaded', () => {
