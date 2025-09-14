@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      async function formData = new FormData(form);
+      const formData = new FormData(form);
       formData.append("produk", localStorage.getItem("currentProduct") || (isJasteb ? "Produk JASTEB" : "Produk Biasa"));
 
       try {
@@ -51,8 +51,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (formBiasa) handleSubmit(formBiasa, false);
   if (formJasteb) handleSubmit(formJasteb, true);
-});
-     
-document.addEventListener('DOMContentLoaded', () => {
-  // kosong, biarkan logika form ditangani langsung di file HTML form
 });
