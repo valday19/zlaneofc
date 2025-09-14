@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulir Pembelian - ZLANEE STORE</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="form-section">
+    <a href="index.html" class="back-button">← Kembali ke Produk</a>
+    <h2>Isi Data Pembelian <span class="product-name"></span></h2>
+    <form id="formBiasa">
+      <input type="text" name="nama" placeholder="Nama Anda" required />
+      <input type="text" name="wa" placeholder="Nomor WhatsApp" required />
+      <textarea name="catatan" placeholder="Catatan (opsional)"></textarea>
+      <div class="file-upload">
+        <label for="buktiPembayaran">Upload Bukti Pembayaran:</label>
+        <input type="file" id="buktiPembayaran" name="buktiPembayaran" accept="image/*" required />
+      </div>
+      <button type="submit">Kirim Pesanan</button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+document.getElementById("formBiasa").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const currentProduct = localStorage.getItem("currentProduct") || "Produk";
+  const formData = new FormData(this);
+
+  const textMessage =
+`🛒 Pesanan Baru
+📦 Produk: ${currentProduct}
+👤 Nama: ${formData.get("nama")}
+📱 WA: ${formData.get("wa")}
+📝 Catatan: ${formData.get("catatan") || "-"}`;
+
+  try {
+    const resp = await fetch("/send-telegram", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ textMessage })
+    });
+
+    const result = await resp.json();
+    if (resp.ok) {
+      alert("✅ Pesanan berhasil dikirim ke Telegram!");
+      localStorage.removeItem("currentProduct");
+      window.location.href = "index.html";
+    } else {
+      alert("❌ Gagal: " + JSON.stringify(result));
+    }
+  } catch (err) {
+    alert("❌ Error: " + err.message);
+  }
+});
+</script>
+</body>
+</html>
