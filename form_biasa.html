@@ -37,7 +37,7 @@ document.getElementById("formBiasa").addEventListener("submit", async function(e
 📝 Catatan: ${formData.get("catatan") || "-"}`;
 
   try {
-    const resp = await fetch("/send-telegram", {
+    const resp = await fetch("/send-telegram.js", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ textMessage })
