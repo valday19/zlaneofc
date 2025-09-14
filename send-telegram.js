@@ -10,10 +10,10 @@ export default async function handler(req, res) {
     const CHAT_ID = process.env.CHAT_ID;
 
     if (!BOT_TOKEN || !CHAT_ID) {
-      return res.status(500).json({ error: "Missing BOT_TOKEN or CHAT_ID" });
+      return res.status(500).json({ error: "BOT_TOKEN / CHAT_ID belum diatur" });
     }
 
-    // Kirim ke Telegram
+    // Kirim pesan ke Telegram
     const telegramRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -24,12 +24,14 @@ export default async function handler(req, res) {
       })
     });
 
+    const result = await telegramRes.json();
+
     if (!telegramRes.ok) {
-      const errText = await telegramRes.text();
-      return res.status(500).json({ error: "Telegram API error", details: errText });
+      return res.status(500).json({ error: "Gagal kirim ke Telegram", details: result });
     }
 
-    return res.status(200).json({ success: true });
+    // ✅ Selalu return JSON
+    return res.status(200).json({ success: true, result });
   } catch (err) {
     console.error("API Error:", err);
     return res.status(500).json({ error: err.message || "Unknown error" });
