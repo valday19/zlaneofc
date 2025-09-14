@@ -18,6 +18,18 @@ if (data.success) {
   alert("❌ Gagal: " + (data.error || "Tidak diketahui"));
 }
 
+function startOrder(product) {
+  localStorage.setItem('currentProduct', product);
+  window.location.href = 'payment.html';
+}
+
+function goToForm() {
+  const fileInput = document.getElementById("buktiPembayaran");
+  if (!fileInput.files || fileInput.files.length === 0) {
+    alert("Silakan upload bukti transfer terlebih dahulu!");
+    return;
+  }
+
   const currentProduct = localStorage.getItem('currentProduct');
   const isJasteb = currentProduct.toLowerCase().includes("jasteb vvip");
 
