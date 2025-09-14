@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const formData = new FormData(form);
+      async function formData = new FormData(form);
       formData.append("produk", localStorage.getItem("currentProduct") || (isJasteb ? "Produk JASTEB" : "Produk Biasa"));
 
       try {
