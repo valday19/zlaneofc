@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append("produk", localStorage.getItem("currentProduct") || (isJasteb ? "Produk JASTEB" : "Produk Biasa"));
 
       try {
-        const res = await fetch("https://zlaneofc.vercel.app/api/send-telegram", { ... })
+        const res = await fetch("https://zlaneofc.vercel.app/api/send-telegram", {
           method: "POST",
           body: formData, // langsung kirim FormData
         });
