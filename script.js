@@ -21,35 +21,31 @@ function goToForm() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const formBiasa = document.getElementById("formBiasa");
-  const formJasteb = document.getElementById("formJasteb");
+  // Form Biasa
+  document.getElementById("formBiasa").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    formData.append("produk", "Produk Biasa");
 
-  async function handleSubmit(form, isJasteb = false) {
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(form);
-      formData.append("produk", localStorage.getItem("currentProduct") || (isJasteb ? "Produk JASTEB" : "Produk Biasa"));
-
-      try {
-        const res = await fetch("https://zlaneofc.vercel.app/api/send-telegram", {
-          method: "POST",
-          body: formData, // langsung kirim FormData
-        });
-
-        const data = await res.json();
-        if (data.success) {
-          alert("✅ Pesanan berhasil dikirim ke admin via Telegram!");
-        } else {
-          alert("❌ Gagal: " + JSON.stringify(data.error));
-        }
-      } catch (err) {
-        alert("❌ Error: " + err.message);
-      }
+    const res = await fetch("/api/send-telegram", {
+      method: "POST",
+      body: formData,
     });
-  }
+    const data = await res.json();
+    alert(data.success ? "✅ Pesanan Biasa + bukti berhasil dikirim!" : "❌ Gagal: " + data.error);
+  });
 
-  if (formBiasa) handleSubmit(formBiasa, false);
-  if (formJasteb) handleSubmit(formJasteb, true);
-});
+  // Form Jasteb
+  document.getElementById("formJasteb").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    formData.append("produk", "Produk JASTEB");
+
+    const res = await fetch("/api/send-telegram", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+    alert(data.success ? "✅ Pesanan JASTEB + bukti berhasil dikirim!" : "❌ Gagal: " + data.error);
+  });
             
