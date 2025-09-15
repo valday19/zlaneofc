@@ -20,7 +20,7 @@ function goToForm() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   // Form Biasa
   document.getElementById("formBiasa").addEventListener("submit", async (e) => {
     e.preventDefault();
